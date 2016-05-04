@@ -1,0 +1,16 @@
+---
+bgp_data:
+- mx11:
+    bgp_group_name: CLOS
+    neighbors:
+      qfxs1:
+        neighbor: 10.10.5.0
+        import_policy: bgp-clos-in
+        export_policy: bgp-clos-out
+        peer_as: 300
+      mx12:
+        neighbor: 10.10.5.5
+        import_policy: bgp-clos-in
+        export_policy: bgp-clos-out
+        peer_as: 201
+

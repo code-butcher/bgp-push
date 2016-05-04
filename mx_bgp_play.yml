@@ -1,0 +1,54 @@
+---
+  - name: test mx bgp automation summit
+    hosts: vsrx-auto
+    roles:
+     - Juniper.junos
+    vars:
+      ansible_python_interpreter: "/usr/bin/env python"
+    connection: local
+    gather_facts: no
+
+    vars_prompt:
+     - name: USERNAME
+       prompt: Username
+       private: no
+     - name: DEVICE_PASSWORD
+       prompt: Device password
+       private: yes
+
+    vars_files:
+      - "mx_bgp_vars.yml"
+
+    tasks:
+    - name: Get Junos device information
+      junos_get_facts:
+        host={{ inventory_hostname }}
+        user={{ USERNAME }}
+        passwd={{ DEVICE_PASSWORD }}
+      register: junos
+
+    - name: Print Junos facts
+      debug: msg="{{junos.facts}}"
+
+#    - name: Install Junos configuration
+#      junos_install_config:
+#        host={{ inventory_hostname }}
+#        user={{ USERNAME }}
+#        passwd={{ DEVICE_PASSWORD }}
+#        file="mx-bgp-policy.conf"
+#        diffs_file="diff.log"
+
+    - name: Debug template
+      debug: msg="{{item}}"
+      with_items: "{{bgp_data}}"
+      
+    - name: Create template
+      template: src="mx_bgp_jinja_template.j2" dest="/Users/benwilliams/Documents/Scripting/Ansible/testing1/{{junos.facts.hostname}}.conf"
+      with_items: "{{bgp_data}}"
+
+    - name: Install Junos configuration
+      junos_install_config:
+        host={{ inventory_hostname }}
+        user={{ USERNAME }}
+        passwd={{ DEVICE_PASSWORD }}
+        file="/Users/benwilliams/Documents/Scripting/Ansible/testing1/{{junos.facts.hostname}}.conf"
