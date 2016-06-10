@@ -1,6 +1,6 @@
 ---
   - name: test mx bgp automation summit
-    hosts: vsrx-auto
+    hosts: mx11
     roles:
      - Juniper.junos
     vars:
@@ -43,7 +43,8 @@
       with_items: "{{bgp_data}}"
       
     - name: Create template
-      template: src="mx_bgp_jinja_template.j2" dest="/Users/benwilliams/Documents/Scripting/Ansible/testing1/{{junos.facts.hostname}}.conf"
+    # replace destination path accordingly
+      template: src="mx_bgp_jinja_template.j2" dest="/Ansible/testing1/{{junos.facts.hostname}}.conf"
       with_items: "{{bgp_data}}"
 
     - name: Install Junos configuration
@@ -51,4 +52,4 @@
         host={{ inventory_hostname }}
         user={{ USERNAME }}
         passwd={{ DEVICE_PASSWORD }}
-        file="/Users/benwilliams/Documents/Scripting/Ansible/testing1/{{junos.facts.hostname}}.conf"
+        file="/Ansible/testing1/{{junos.facts.hostname}}.conf"
