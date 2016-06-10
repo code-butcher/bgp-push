@@ -52,4 +52,5 @@
         host={{ inventory_hostname }}
         user={{ USERNAME }}
         passwd={{ DEVICE_PASSWORD }}
+        # replace destination path accordingly
         file="/Ansible/testing1/{{junos.facts.hostname}}.conf"
